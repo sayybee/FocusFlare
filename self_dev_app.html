@@ -1,0 +1,188 @@
+<!--
+Self Development App - Minimal Working HTML + JavaScript Version (Web)
+Target Audience: Students aged 14–25
+Feature: Focus Timer, To-Do List, Motivation Center, IQ Game, Exercise Corner
+Technology: HTML, CSS, JavaScript (can be run in browser or hosted using GitHub Pages)
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus & Grow</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #2E2E2E;
+    }
+    header {
+      background-color: #92B4EC;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.5rem;
+    }
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background-color: #FFE69A;
+      padding: 0.5rem 0;
+    }
+    nav button {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    section {
+      display: none;
+      padding: 1rem;
+    }
+    section.active {
+      display: block;
+    }
+    #timer-display {
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+    .game-box, .motivation-box, .exercise-box, .todo-box {
+      background: #fff;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>Focus & Grow 🌱</header>
+  <nav>
+    <button onclick="showSection('focus')">Focus Timer</button>
+    <button onclick="showSection('todo')">To-Do List</button>
+    <button onclick="showSection('motivation')">Motivation</button>
+    <button onclick="showSection('game')">IQ Game</button>
+    <button onclick="showSection('exercise')">Exercise</button>
+  </nav>
+
+  <section id="focus" class="active">
+    <h2>Focus Timer</h2>
+    <div id="timer-display">25:00</div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="resetTimer()">Reset</button>
+  </section>
+
+  <section id="todo">
+    <h2>To-Do List</h2>
+    <input type="text" id="task" placeholder="New Task">
+    <button onclick="addTask()">Add</button>
+    <ul id="task-list"></ul>
+  </section>
+
+  <section id="motivation">
+    <h2>Daily Motivation</h2>
+    <div class="motivation-box" id="quote"></div>
+    <button onclick="newQuote()">New Quote</button>
+  </section>
+
+  <section id="game">
+    <h2>Quick IQ Game</h2>
+    <div class="game-box">
+      <p>What comes next in the sequence: 2, 4, 8, 16, ?</p>
+      <input type="text" id="answer">
+      <button onclick="checkAnswer()">Submit</button>
+      <p id="result"></p>
+    </div>
+  </section>
+
+  <section id="exercise">
+    <h2>Exercise Corner</h2>
+    <div class="exercise-box">
+      <ul>
+        <li>🧘 5 Min Stretch</li>
+        <li>🏃 20 Jumping Jacks</li>
+        <li>🧘‍♂️ 1-Min Breathing Exercise</li>
+        <li>💧 Drink Water</li>
+      </ul>
+    </div>
+  </section>
+
+  <script>
+    // Navigation
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Focus Timer
+    let timer;
+    let timeLeft = 1500;
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById("timer-display").textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timer);
+          alert("Time's up! Take a break ☕");
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timeLeft = 1500;
+      updateTimerDisplay();
+    }
+
+    // To-Do List
+    function addTask() {
+      const taskText = document.getElementById('task').value;
+      if (taskText.trim() === '') return;
+      const li = document.createElement('li');
+      li.textContent = taskText;
+      li.onclick = () => li.style.textDecoration = 'line-through';
+      document.getElementById('task-list').appendChild(li);
+      document.getElementById('task').value = '';
+    }
+
+    // Motivation Quotes
+    const quotes = [
+      "Believe in yourself!",
+      "You're doing great!",
+      "Keep going, you're almost there!",
+      "Discipline > Motivation",
+      "Every day is a fresh start."
+    ];
+    function newQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote').textContent = quote;
+    }
+    newQuote(); // Show one on load
+
+    // IQ Game
+    function checkAnswer() {
+      const answer = document.getElementById('answer').value.trim();
+      const result = document.getElementById('result');
+      if (answer === '32') {
+        result.textContent = "Correct! 🧠";
+        result.style.color = 'green';
+      } else {
+        result.textContent = "Try again!";
+        result.style.color = 'red';
+      }
+    }
+  </script>
+</body>
+</html>
